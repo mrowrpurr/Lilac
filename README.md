@@ -7,11 +7,16 @@
 >
 > _There are 2 releases available, 1 for [PapyrusUtil][] and another for [ConsoleUtil][]._
 >
-> _**Download this fork in the [Releases][] section to the right `---->`**_
+> _**Download this fork in the [Releases][] section of the GitHub page (to the right)**_
+>
+> _~ @mrowrpurr_
 
 [PapyrusUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/13048
 [ConsoleUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/24858
 [Releases]: https://github.com/mrowrpurr/Lilac/releases
+
+---
+---
 
 ![Lilac](http://i.imgur.com/YzpYlCG.png "Lilac")
 ### A Papyrus Testing Framework
