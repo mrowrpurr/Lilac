@@ -16,6 +16,10 @@
 [Releases]: https://github.com/mrowrpurr/Lilac/releases
 
 ---
+
+- **Download Fork (requires PapyrusUtil)**
+- **Download Form (requires ConsoleUtil)**
+
 ---
 
 ![Lilac](http://i.imgur.com/YzpYlCG.png "Lilac")
