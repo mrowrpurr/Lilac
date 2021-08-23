@@ -9,7 +9,7 @@
 >
 > _**Download this fork in the [Releases][] section of the GitHub page (to the right)**_
 >
-> _~ @mrowrpurr_
+> _~_ _@mrowrpurr_
 
 [PapyrusUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/13048
 [ConsoleUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/24858
