@@ -15,6 +15,40 @@ int property APIVersion = 2 autoReadOnly
 bool property enabled = true auto
 { Default: True. If false, this test cannot be run at runtime. Can help prevent unwanted execution. }
 
+; Print to Console and Papyrus Log ================================================================================
+
+bool consoleVisible
+bool registeredForConsole
+string consoleContent = ""
+
+function ConsoleAndLog(string text)
+	if text
+		Debug.Trace(text)
+		if consoleVisible
+			PrintToConsole(text)
+		else
+			if consoleContent
+				consoleContent += "\n" + text
+			else
+				consoleContent += text
+			endIf
+		endIf
+	endIf
+endFunction
+
+Event OnMenuOpen(string menuName)
+	if menuName == "Console" && ! consoleVisible
+		consoleVisible = true
+		UnregisterForMenu("Console")
+		PrintToConsole(consoleContent)
+		consoleContent = ""
+	endIf
+EndEvent
+
+function PrintToConsole(string text)
+	ConsoleUtil.PrintMessage(text)
+endFunction
+
 ; Unit Test Runner ================================================================================
 
 float last_current_time = -1.0
@@ -39,13 +73,14 @@ int[] property failedExpectNumbers auto hidden
 int property expectCount = 0 auto hidden
 
 Event OnInit()
+	RegisterForMenu("Console")
 	if self.IsRunning()
 		if enabled
 			RegisterForSingleUpdate(1)
 		else
-			debug.trace(createLilacDebugMessage(INFO, "The Lilac test on " + self + " was disabled."))
-			debug.trace(createLilacDebugMessage(INFO, "Set the 'enabled' property of the test script to True in order to run it."))
-			debug.trace(createLilacDebugMessage(INFO, "If you are a mod user and see this message, please ignore it; this message is for mod developers and is not indicative of a bug."))
+			ConsoleAndLog(createLilacDebugMessage(INFO, "The Lilac test on " + self + " was disabled."))
+			ConsoleAndLog(createLilacDebugMessage(INFO, "Set the 'enabled' property of the test script to True in order to run it."))
+			ConsoleAndLog(createLilacDebugMessage(INFO, "If you are a mod user and see this message, please ignore it; this message is for mod developers and is not indicative of a bug."))
 		endif
 	endif
 EndEvent
@@ -55,9 +90,6 @@ Event OnUpdate()
 EndEvent
 
 function RunTests()
-	Utility.Wait(2.0)
-	debug.trace(createLilacDebugMessage(INFO, "Starting " + SystemName + " " + SystemVersion + " (API v" + APIVersion + ") on " + self))
-	
 	; Initial setup
 	ResetTestRunner()
 	SetUp()
@@ -75,7 +107,6 @@ function RunTests()
 	; Tear down
 	afterEach()
 	afterAll()
-	self.Stop()
 endFunction
 
 ;/********f* Lilac/SetUp
@@ -207,10 +238,10 @@ function ShowTestFailureLog()
 		if failedTestSuites[working_index] != ""
 			current_working_test_suite = failedTestSuites[working_index]
 			if !failed_tests_msg_shown
-				debug.trace(createLilacDebugMessage(INFO, "Failed Tests (first 128 failed test steps shown):"))
+				ConsoleAndLog(createLilacDebugMessage(INFO, "Failed Tests (first 128 failed test steps shown):"))
 				failed_tests_msg_shown = true
 			endif
-			debug.trace(createLilacDebugMessage(INFO, " - " + failedTestSuites[working_index] + ":"))
+			ConsoleAndLog(createLilacDebugMessage(INFO, " - " + failedTestSuites[working_index] + ":"))
 
 			string current_working_test_case = ""
 			bool processing_cases = true
@@ -218,11 +249,11 @@ function ShowTestFailureLog()
 				bool processing_steps = true
 				if failedTestCases[working_index] != ""  && failedTestSuites[working_index] == current_working_test_suite
 					current_working_test_case = failedTestCases[working_index]
-					debug.trace(createLilacDebugMessage(INFO, "    - " + failedTestCases[working_index] + ":"))
+					ConsoleAndLog(createLilacDebugMessage(INFO, "    - " + failedTestCases[working_index] + ":"))
 
 					while processing_steps
 						if failedActuals[working_index] != "" && failedTestCases[working_index] == current_working_test_case
-							debug.trace(createLilacDebugMessage(INFO, CreateStepFailureMessage(working_index)))
+							ConsoleAndLog(createLilacDebugMessage(INFO, CreateStepFailureMessage(working_index)))
 							working_index += 1
 						else
 							processing_steps = false
@@ -239,7 +270,7 @@ function ShowTestFailureLog()
 endFunction
 
 function ShowTestSummary()
-	debug.trace(createLilacDebugMessage(INFO, "  " + testsRun + " total  " + testsPassed + " passed  " + testsFailed + " failed"))
+	ConsoleAndLog(createLilacDebugMessage(INFO, "  " + testsRun + " total  " + testsPassed + " passed  " + testsFailed + " failed"))
 	Debug.Notification(createLilacDebugMessage(INFO, "  " + testsRun + " total  " + testsPassed + " passed  " + testsFailed + " failed"))
 endFunction
 
@@ -252,7 +283,7 @@ string function CreateStepFailureMessage(int index)
 	
 	string header = "        - Expect " + expectnumber_val + ": expected"
 
-	;debug.trace("Creating step failure message from index " + index + " " + cdtn_val  + " " + matcher_val + " " + actual_val + " " + expected_val)
+	;ConsoleAndLog("Creating step failure message from index " + index + " " + cdtn_val  + " " + matcher_val + " " + actual_val + " " + expected_val)
 
 	string cdtn
 	if failedConditions[index] == true
@@ -424,15 +455,15 @@ it("should do something", myTestCase())
 
 	if testsFailed > 0
 		if warn_on_long_duration && deltaTimeSecs > warning_threshold
-			debug.trace(createLilacDebugMessage(WARN, "Executed " + testsRun + " (" + testsFailed + " FAILED)" + resultString + " (slow: " + deltaTimeSecs + " secs)"))
+			ConsoleAndLog(createLilacDebugMessage(WARN, "Executed " + testsRun + " (" + testsFailed + " FAILED)" + resultString + " (slow: " + deltaTimeSecs + " secs)"))
 		else
-			debug.trace(createLilacDebugMessage(INFO, "Executed " + testsRun + " (" + testsFailed + " FAILED)" + resultString + " (" + deltaTimeSecs + " secs)"))
+			ConsoleAndLog(createLilacDebugMessage(INFO, "Executed " + testsRun + " (" + testsFailed + " FAILED)" + resultString + " (" + deltaTimeSecs + " secs)"))
 		endif
 	else
 		if warn_on_long_duration && deltaTimeSecs > warning_threshold
-			debug.trace(createLilacDebugMessage(WARN, "Executed " + testsRun + resultString + " (slow: " + deltaTimeSecs + " secs)"))
+			ConsoleAndLog(createLilacDebugMessage(WARN, "Executed " + testsRun + resultString + " (slow: " + deltaTimeSecs + " secs)"))
 		else
-			debug.trace(createLilacDebugMessage(INFO, "Executed " + testsRun + resultString + " (" + deltaTimeSecs + " secs)"))
+			ConsoleAndLog(createLilacDebugMessage(INFO, "Executed " + testsRun + resultString + " (" + deltaTimeSecs + " secs)"))
 		endif
 	endif
 	last_current_time = this_current_time
@@ -947,7 +978,7 @@ function RaiseResult(bool abResult, string asActual, bool abCondition, int aiMat
 		endif
 	endif
 	if verbose_logging
-		debug.trace(createLilacDebugMessage(INFO, CreateVerboseStepMessage(abResult, asActual, abCondition, aiMatcher, asExpected, expectCount)))
+		ConsoleAndLog(createLilacDebugMessage(INFO, CreateVerboseStepMessage(abResult, asActual, abCondition, aiMatcher, asExpected, expectCount)))
 	endif
 endFunction
 
@@ -971,12 +1002,21 @@ function RaiseException_InvalidMatcher(int aiMatcher)
 		matcher = "beNone"
 	endif
 
-	debug.trace(createLilacDebugMessage(ERROR, "Invalid matcher '" + matcher + "' used."))
+	ConsoleAndLog(createLilacDebugMessage(ERROR, "Invalid matcher '" + matcher + "' used."))
 endFunction
 
+string _scriptDisplayName = ""
+string property ScriptDisplayName
+	string function get()
+		if ! _scriptDisplayName
+			_scriptDisplayName = StringUtil.Substring(self, 1, StringUtil.Find(self, " ") - 1)
+		endIf
+		return _scriptDisplayName
+	endFunction
+endProperty
+
 string function createLilacDebugMessage(int aiLogLevel, string asMessage)
-	string level
-	return "[" + SystemName + "] " + getLogLevel(aiLogLevel) + asMessage
+	return "[" + ScriptDisplayName + "] " + asMessage
 endFunction
 
 string function getLogLevel(int aiLogLevel)
