@@ -17,8 +17,10 @@
 
 ---
 
-- **Download Fork (requires PapyrusUtil)**
-- **Download Form (requires ConsoleUtil)**
+- **[Download Fork (requires PapyrusUtil)](https://github.com/mrowrpurr/Lilac/releases/download/v1.2c/Console_Lilac_PapyrusUtil.7z)**
+- **[Download Fork (requires ConsoleUtil)](https://github.com/mrowrpurr/Lilac/releases/download/v1.2c/Console_Lilac_ConsoleUtil.7z)**
+
+![Screenshot](https://user-images.githubusercontent.com/87039589/130496507-1607079a-3b0f-4ccf-a952-40e9fcfd2c89.png)
 
 ---
 
