@@ -55,6 +55,7 @@ Event OnUpdate()
 EndEvent
 
 function RunTests()
+	Utility.Wait(2.0)
 	debug.trace(createLilacDebugMessage(INFO, "Starting " + SystemName + " " + SystemVersion + " (API v" + APIVersion + ") on " + self))
 	
 	; Initial setup
