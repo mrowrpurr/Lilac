@@ -240,6 +240,7 @@ endFunction
 
 function ShowTestSummary()
 	debug.trace(createLilacDebugMessage(INFO, "  " + testsRun + " total  " + testsPassed + " passed  " + testsFailed + " failed"))
+	Debug.Notification(createLilacDebugMessage(INFO, "  " + testsRun + " total  " + testsPassed + " passed  " + testsFailed + " failed"))
 endFunction
 
 string function CreateStepFailureMessage(int index)
