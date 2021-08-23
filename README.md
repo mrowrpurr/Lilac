@@ -1,3 +1,18 @@
+> _This fork updates `Lilac` to:_
+> - _Print test output to the Skyrim ~ console_
+> - _Show the test summary as a notification (top-left of screen)_
+>
+> _This requires \*either\* [PapyrusUtil][] or [ConsoleUtil][]_
+> _(to print to the console)_
+>
+> _There are 2 releases available, 1 for [PapyrusUtil][] and another for [ConsoleUtil][]._
+>
+> _**Download this fork in the [Releases][] section to the right `---->`**_
+
+[PapyrusUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/13048
+[ConsoleUtil]: https://www.nexusmods.com/skyrimspecialedition/mods/24858
+[Releases]: https://github.com/mrowrpurr/Lilac/releases
+
 ![Lilac](http://i.imgur.com/YzpYlCG.png "Lilac")
 ### A Papyrus Testing Framework
 
